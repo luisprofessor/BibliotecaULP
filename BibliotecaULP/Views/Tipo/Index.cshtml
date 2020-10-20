@@ -1,0 +1,41 @@
+﻿@model IEnumerable<BibliotecaULP.Models.Tipo>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                <a href="@Url.Action("Edit", "Tipo", new { id = item.TipoId})" class="waves-effect waves-light btn-flat light-blue lighten-3 tooltipped" data-position="bottom" data-tooltip="Eliminar" style="border-radius:100px;"><i class="tiny material-icons">create</i></a>
+                <a href="@Url.Action("Delete", "Tipo", new { id = item.TipoId})" class="waves-effect waves-light btn-flat light-blue lighten-3 tooltipped" data-position="bottom" data-tooltip="Eliminar" style="border-radius:100px;"><i class="tiny material-icons">delete</i></a>
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
