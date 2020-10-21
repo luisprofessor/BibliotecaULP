@@ -12,7 +12,7 @@ namespace BibliotecaULP.Models
         [Key]
         public int MateriaId { get; set; }
 
-        public int CarrerId { get; set; }
+        public int CarreraId { get; set; }
 
         [ForeignKey("CarrerId")]
         public Carrera Carrera { get; set; }

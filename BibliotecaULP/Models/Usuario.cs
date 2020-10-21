@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +17,9 @@ namespace BibliotecaULP.Models
         public string Descripcion { get; set; }
         public string Clave { get; set; }
         public string Rol { get; set; }
-        public IFormFile Imagen { get; set; }
+        public String Imagen { get; set; }
+
+        [NotMapped]
+        public IFormFile ImagenFile { get; set; }
     }
 }

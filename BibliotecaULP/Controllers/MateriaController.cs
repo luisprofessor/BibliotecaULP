@@ -14,11 +14,21 @@ namespace BibliotecaULP.Controllers
         private readonly IConfiguration configuration;
 
         private readonly RepositorioMateria repositorioMateria;
+
+        private readonly RepositorioCarrera repositorioCarrera;
+
+        private readonly RepositorioUsuario repositorioUsuario;
+
         public MateriaController(IConfiguration configuration)
         {
             this.configuration = configuration;
 
             repositorioMateria = new RepositorioMateria(configuration);
+
+            repositorioCarrera = new RepositorioCarrera(configuration);
+
+            repositorioUsuario = new RepositorioUsuario(configuration);
+
         }
         // GET: Materia
         public ActionResult Index()
@@ -46,6 +56,10 @@ namespace BibliotecaULP.Controllers
         // GET: Materia/Create
         public ActionResult Create()
         {
+            ViewBag.Carreras = repositorioCarrera.ObtenerTodos();
+
+            ViewBag.Profesores = repositorioUsuario.ObtenerTodosLosProfesores();
+
             return View();
         }
 
