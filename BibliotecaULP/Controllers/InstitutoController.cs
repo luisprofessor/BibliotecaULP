@@ -2,120 +2,154 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BibliotecaULP.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using BibliotecaULP.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace BibliotecaULP.Controllers
 {
     public class InstitutoController : Controller
     {
-        private readonly IConfiguration configuration;
+        private readonly DataContext _context;
+        private readonly IConfiguration config;
 
-        private readonly RepositorioInstituto repoInstituto;
-        public InstitutoController(IConfiguration configuration)
+        public InstitutoController(DataContext contexto, IConfiguration config)
         {
-            this.configuration = configuration;
-
-            this.repoInstituto = new RepositorioInstituto(configuration);
+            this._context = contexto;
+            this.config = config;
         }
-        // GET: Instituto
-        public ActionResult Index()
-        {
-            var Institutos = repoInstituto.ObtenerTodos();
 
-            return View(Institutos);
+        // GET: Instituto
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Instituto.ToListAsync());
         }
 
         // GET: Instituto/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var instituto = await _context.Instituto
+                .FirstOrDefaultAsync(m => m.InstitutoId == id);
+            if (instituto == null)
+            {
+                return NotFound();
+            }
+
+            return View(instituto);
         }
 
         // GET: Instituto/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
 
         // POST: Instituto/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Instituto i)
+        public async Task<IActionResult> Create([Bind("InstitutoId,Nombre")] Instituto instituto)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-                repoInstituto.Alta(i);
-
+                _context.Add(instituto);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(instituto);
         }
 
         // GET: Instituto/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            var InstitutoAEditar = repoInstituto.ObtenerPorId(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            return View(InstitutoAEditar);
+            var instituto = await _context.Instituto.FindAsync(id);
+            if (instituto == null)
+            {
+                return NotFound();
+            }
+            return View(instituto);
         }
 
         // POST: Instituto/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Instituto i)
+        public async Task<IActionResult> Edit(int id, [Bind("InstitutoId,Nombre")] Instituto instituto)
         {
-            try
+            if (id != instituto.InstitutoId)
             {
-                // TODO: Add update logic here
-                repoInstituto.ModificarInstituto(i);
+                return NotFound();
+            }
 
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(instituto);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!InstitutoExists(instituto.InstitutoId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
-            {
-                return View();
-            }
+            return View(instituto);
         }
 
         // GET: Instituto/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            try
+            if (id == null)
             {
-                repoInstituto.Baja(id);
-
-                return RedirectToAction(nameof(Index));
-
+                return NotFound();
             }
-            catch(Exception ex)
+
+            var instituto = await _context.Instituto
+                .FirstOrDefaultAsync(m => m.InstitutoId == id);
+            if (instituto == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-           
+
+            return View(instituto);
         }
 
         // POST: Instituto/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-               
+            var instituto = await _context.Instituto.FindAsync(id);
+            _context.Instituto.Remove(instituto);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+        private bool InstitutoExists(int id)
+        {
+            return _context.Instituto.Any(e => e.InstitutoId == id);
         }
     }
 }

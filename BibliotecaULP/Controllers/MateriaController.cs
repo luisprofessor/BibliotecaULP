@@ -2,128 +2,167 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BibliotecaULP.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using BibliotecaULP.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace BibliotecaULP.Controllers
 {
     public class MateriaController : Controller
     {
-        private readonly IConfiguration configuration;
+        private readonly DataContext _context;
+        private readonly IConfiguration config;
 
-        private readonly RepositorioMateria repositorioMateria;
-
-        private readonly RepositorioCarrera repositorioCarrera;
-
-        private readonly RepositorioUsuario repositorioUsuario;
-
-        public MateriaController(IConfiguration configuration)
+        public MateriaController(DataContext contexto, IConfiguration config)
         {
-            this.configuration = configuration;
-
-            repositorioMateria = new RepositorioMateria(configuration);
-
-            repositorioCarrera = new RepositorioCarrera(configuration);
-
-            repositorioUsuario = new RepositorioUsuario(configuration);
-
+            this._context = contexto;
+            this.config = config;
         }
+
         // GET: Materia
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-
-            try
-            {
-                var Materias = repositorioMateria.ObtenerTodos();
-
-                return View(Materias);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            var dataContext = _context.Materia.Include(m => m.Carrera).Include(m => m.Profesor);
+            return View(await dataContext.ToListAsync());
         }
 
         // GET: Materia/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var materia = await _context.Materia
+                .Include(m => m.Carrera)
+                .Include(m => m.Profesor)
+                .FirstOrDefaultAsync(m => m.MateriaId == id);
+            if (materia == null)
+            {
+                return NotFound();
+            }
+
+            return View(materia);
         }
 
         // GET: Materia/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
-            ViewBag.Carreras = repositorioCarrera.ObtenerTodos();
-
-            ViewBag.Profesores = repositorioUsuario.ObtenerTodosLosProfesores();
-
+            ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "CarreraId");
+            ViewData["ProfesorId"] = new SelectList(_context.Usuario, "UsuarioId", "Clave");
             return View();
         }
 
         // POST: Materia/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create([Bind("MateriaId,CarreraId,ProfesorId,Nombre")] Materia materia)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
-
+                _context.Add(materia);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "CarreraId", materia.CarreraId);
+            ViewData["ProfesorId"] = new SelectList(_context.Usuario, "UsuarioId", "Clave", materia.ProfesorId);
+            return View(materia);
         }
 
         // GET: Materia/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var materia = await _context.Materia.FindAsync(id);
+            if (materia == null)
+            {
+                return NotFound();
+            }
+            ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "CarreraId", materia.CarreraId);
+            ViewData["ProfesorId"] = new SelectList(_context.Usuario, "UsuarioId", "Clave", materia.ProfesorId);
+            return View(materia);
         }
 
         // POST: Materia/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, [Bind("MateriaId,CarreraId,ProfesorId,Nombre")] Materia materia)
         {
-            try
+            if (id != materia.MateriaId)
             {
-                // TODO: Add update logic here
+                return NotFound();
+            }
 
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(materia);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!MateriaExists(materia.MateriaId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "CarreraId", materia.CarreraId);
+            ViewData["ProfesorId"] = new SelectList(_context.Usuario, "UsuarioId", "Clave", materia.ProfesorId);
+            return View(materia);
         }
 
         // GET: Materia/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var materia = await _context.Materia
+                .Include(m => m.Carrera)
+                .Include(m => m.Profesor)
+                .FirstOrDefaultAsync(m => m.MateriaId == id);
+            if (materia == null)
+            {
+                return NotFound();
+            }
+
+            return View(materia);
         }
 
         // POST: Materia/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            var materia = await _context.Materia.FindAsync(id);
+            _context.Materia.Remove(materia);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+        private bool MateriaExists(int id)
+        {
+            return _context.Materia.Any(e => e.MateriaId == id);
         }
     }
 }

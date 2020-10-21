@@ -2,122 +2,154 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BibliotecaULP.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using BibliotecaULP.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace BibliotecaULP.Controllers
 {
     public class TipoController : Controller
     {
-        private readonly IConfiguration configuration;
+        private readonly DataContext _context;
+        private readonly IConfiguration config;
 
-        private readonly RepositorioTipo repositorioTipo;
-
-        public TipoController(IConfiguration configuration)
+        public TipoController(DataContext contexto, IConfiguration config)
         {
-            this.configuration = configuration;
-
-            repositorioTipo = new RepositorioTipo(configuration);
+            this._context = contexto;
+            this.config = config;
         }
 
-
         // GET: Tipo
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-
-            try
-            {
-                var tipos = repositorioTipo.ObtenerTodos();
-
-                return View(tipos);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            return View(await _context.Tipo.ToListAsync());
         }
 
         // GET: Tipo/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var tipo = await _context.Tipo
+                .FirstOrDefaultAsync(m => m.TipoId == id);
+            if (tipo == null)
+            {
+                return NotFound();
+            }
+
+            return View(tipo);
         }
 
         // GET: Tipo/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
 
         // POST: Tipo/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Tipo t)
+        public async Task<IActionResult> Create([Bind("TipoId,Nombre")] Tipo tipo)
         {
-            try
+            if (ModelState.IsValid)
             {
-                repositorioTipo.Alta(t);
-
+                _context.Add(tipo);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(tipo);
         }
 
         // GET: Tipo/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int? id)
         {
-            Tipo t = repositorioTipo.ObtenerPorId(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            return View(t);
+            var tipo = await _context.Tipo.FindAsync(id);
+            if (tipo == null)
+            {
+                return NotFound();
+            }
+            return View(tipo);
         }
 
         // POST: Tipo/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Tipo t)
+        public async Task<IActionResult> Edit(int id, [Bind("TipoId,Nombre")] Tipo tipo)
         {
-            try
+            if (id != tipo.TipoId)
             {
-                repositorioTipo.ModificarTipo(t);
+                return NotFound();
+            }
 
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(tipo);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TipoExists(tipo.TipoId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
-            {
-                return View();
-            }
+            return View(tipo);
         }
 
         // GET: Tipo/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            var TipoABorrar = repositorioTipo.ObtenerPorId(id);
+            var tipo = await _context.Tipo
+                .FirstOrDefaultAsync(m => m.TipoId == id);
+            if (tipo == null)
+            {
+                return NotFound();
+            }
 
-            return View(TipoABorrar);
+            return View(tipo);
         }
 
         // POST: Tipo/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Tipo t)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
-            {
-                repositorioTipo.Baja(id);
+            var tipo = await _context.Tipo.FindAsync(id);
+            _context.Tipo.Remove(tipo);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch(Exception ex)
-            {
-                return View();
-            }
+        private bool TipoExists(int id)
+        {
+            return _context.Tipo.Any(e => e.TipoId == id);
         }
     }
 }
