@@ -13,9 +13,12 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="InstitutoId" class="control-label"></label>
-                <input asp-for="InstitutoId" class="form-control" />
-                <span asp-validation-for="InstitutoId" class="text-danger"></span>
+                <select class="selectpicker form-control " data-live-search="true" title="Institutos" name="InstitutoId">
+                    @foreach (var item in (IList<Instituto>)ViewBag.Instituto)
+                    {
+                        <option value="@item.InstitutoId">@(item.Nombre)</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Nombre" class="control-label"></label>

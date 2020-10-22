@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using BibliotecaULP.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +28,14 @@ namespace BibliotecaULP
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+              .AddCookie(options =>
+              {
+                  options.LoginPath = "/Usuario/Login";
+                  options.LogoutPath = "/Usuario/Logout";
+                  options.AccessDeniedPath = "/Home/Restringido";
+              });
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -33,6 +43,10 @@ namespace BibliotecaULP
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Administrador", policy => policy.RequireClaim(ClaimTypes.Role, "Administrador", "SuperAdministrador"));
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

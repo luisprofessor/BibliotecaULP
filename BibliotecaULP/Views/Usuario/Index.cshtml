@@ -19,16 +19,13 @@
                 @Html.DisplayNameFor(model => model.Apellido)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Descripcion)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Clave)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Rol)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Imagen)
             </th>
             <th></th>
         </tr>
@@ -43,16 +40,13 @@
                 @Html.DisplayFor(modelItem => item.Apellido)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Descripcion)
-            </td>
+            </td>        
             <td>
-                @Html.DisplayFor(modelItem => item.Clave)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rol)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Imagen)
+                @Html.DisplayFor(modelItem => item.RolNombre)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.UsuarioId">Edit</a> |

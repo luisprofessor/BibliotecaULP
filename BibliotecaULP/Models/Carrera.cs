@@ -13,6 +13,7 @@ namespace BibliotecaULP.Models
         [Key]
         [DisplayName("Codigo")]
         public int CarreraId { get; set; }
+        [DisplayName("Instituto")]
         public int InstitutoId { get; set; }
         [ForeignKey("InstitutoId")]
         public Instituto Instituto { get; set; }

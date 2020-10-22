@@ -11,18 +11,22 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace BibliotecaULP.Controllers
 {
     public class UsuarioController : Controller
     {
         private readonly DataContext _context;
+        private readonly IHostingEnvironment environment;
         private readonly IConfiguration config;
 
-        public UsuarioController(DataContext contexto, IConfiguration config)
+        public UsuarioController(DataContext contexto, IConfiguration config, IHostingEnvironment environment)
         {
             this._context = contexto;
             this.config = config;
+            this.environment = environment;
         }
 
         // GET: Usuarios
@@ -52,23 +56,64 @@ namespace BibliotecaULP.Controllers
         // GET: Usuarios/Create
         public IActionResult Create()
         {
+            ViewBag.Roles = Usuario.ObtenerRoles();
             return View();
         }
 
         // POST: Usuarios/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UsuarioId,Nombre,Apellido,Descripcion,Clave,Rol,Imagen")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("UsuarioId,Nombre,Apellido,Descripcion,Email,Clave,Rol,ImagenFile")] Usuario usuario)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            try
+            {                          
+                if (ModelState.IsValid)
+                {
+                    string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                        password: usuario.Clave,
+                        salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
+                        prf: KeyDerivationPrf.HMACSHA1,
+                        iterationCount: 1000,
+                        numBytesRequested: 256 / 8));
+                    usuario.Clave = hashed;
+                    usuario.Imagen = "";
+                    usuario.Rol = User.IsInRole("Administrador") || User.IsInRole("SuperAdministrador") ? usuario.Rol : (int)enRoles.Profesor;
+                    var nbreRnd = Guid.NewGuid();//posible nombre aleatorio
+                    _context.Add(usuario);
+                    _context.SaveChanges();
+                    usuario.UsuarioId = _context.Usuario.AsNoTracking().LastOrDefault().UsuarioId;
+                    TempData["Id"] = usuario.UsuarioId;
+                    if (usuario.ImagenFile != null && usuario.UsuarioId > 0)
+                    {
+                        string wwwPath = environment.WebRootPath;
+                        string path = Path.Combine(wwwPath, "Uploads");
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        string fileName = "avatar_" + usuario.UsuarioId + Path.GetExtension(usuario.ImagenFile.FileName);
+                        string pathCompleto = Path.Combine(path, fileName);
+                        usuario.Imagen = Path.Combine("/Uploads", fileName);
+                        using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+                        {
+                            usuario.ImagenFile.CopyTo(stream);
+                        }
+                        _context.Update(usuario);
+                    }
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                    return View(usuario);
             }
-            return View(usuario);
+            catch (Exception ex)
+            {
+                ViewBag.Roles = Usuario.ObtenerRoles();
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                return View(usuario);
+            }
+          
         }
 
         // GET: Usuarios/Edit/5

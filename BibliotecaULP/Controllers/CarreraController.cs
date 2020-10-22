@@ -48,12 +48,11 @@ namespace BibliotecaULP.Controllers
         // GET: Carreras/Create
         public IActionResult Create()
         {
+            ViewBag.Instituto = _context.Instituto.ToList();
             return View();
         }
 
         // POST: Carreras/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CarreraId,InstitutoId,Nombre")] Carrera carrera)
@@ -76,6 +75,7 @@ namespace BibliotecaULP.Controllers
             }
 
             var carrera = await _context.Carrera.FindAsync(id);
+            ViewBag.Instituto = _context.Instituto.ToList();
             if (carrera == null)
             {
                 return NotFound();
@@ -126,7 +126,7 @@ namespace BibliotecaULP.Controllers
                 return NotFound();
             }
 
-            var carrera = await _context.Carrera
+            var carrera = await _context.Carrera.Include(x => x.Instituto)
                 .FirstOrDefaultAsync(m => m.CarreraId == id);
             if (carrera == null)
             {
