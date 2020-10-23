@@ -39,7 +39,9 @@ namespace BibliotecaULP.Models
         public static IDictionary<int, string> ObtenerRoles()
         {
             SortedDictionary<int, string> roles = new SortedDictionary<int, string>();
+
             Type tipoEnumRol = typeof(enRoles);
+
             foreach (var valor in Enum.GetValues(tipoEnumRol))
             {
                 roles.Add((int)valor, Enum.GetName(tipoEnumRol, valor));

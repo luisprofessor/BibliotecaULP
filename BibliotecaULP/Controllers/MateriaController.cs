@@ -12,12 +12,16 @@ namespace BibliotecaULP.Controllers
 {
     public class MateriaController : Controller
     {
+
         private readonly DataContext _context;
+
         private readonly IConfiguration config;
+
 
         public MateriaController(DataContext contexto, IConfiguration config)
         {
             this._context = contexto;
+
             this.config = config;
         }
 
@@ -25,6 +29,7 @@ namespace BibliotecaULP.Controllers
         public async Task<IActionResult> Index()
         {
             var dataContext = _context.Materia.Include(m => m.Carrera).Include(m => m.Profesor);
+
             return View(await dataContext.ToListAsync());
         }
 
@@ -37,9 +42,13 @@ namespace BibliotecaULP.Controllers
             }
 
             var materia = await _context.Materia
+
                 .Include(m => m.Carrera)
+
                 .Include(m => m.Profesor)
+
                 .FirstOrDefaultAsync(m => m.MateriaId == id);
+
             if (materia == null)
             {
                 return NotFound();
@@ -51,8 +60,10 @@ namespace BibliotecaULP.Controllers
         // GET: Materia/Create
         public IActionResult Create()
         {
-            ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "CarreraId");
-            ViewData["ProfesorId"] = new SelectList(_context.Usuario, "UsuarioId", "Clave");
+            ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId","Nombre");
+
+            ViewData["ProfesorId"] = new SelectList(_context.Usuario.Where(x => x.Rol == 3), "UsuarioId", "Apellido");
+
             return View();
         }
 
@@ -66,11 +77,15 @@ namespace BibliotecaULP.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(materia);
+
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "CarreraId", materia.CarreraId);
-            ViewData["ProfesorId"] = new SelectList(_context.Usuario, "UsuarioId", "Clave", materia.ProfesorId);
+            ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "Nombre", materia.CarreraId);
+
+            ViewData["ProfesorId"] = new SelectList(_context.Usuario.Where(x => x.Rol == 3), "UsuarioId", "Apellido", materia.ProfesorId);
+
             return View(materia);
         }
 
@@ -83,12 +98,15 @@ namespace BibliotecaULP.Controllers
             }
 
             var materia = await _context.Materia.FindAsync(id);
+
             if (materia == null)
             {
                 return NotFound();
             }
-            ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "CarreraId", materia.CarreraId);
-            ViewData["ProfesorId"] = new SelectList(_context.Usuario, "UsuarioId", "Clave", materia.ProfesorId);
+            ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "Nombre", materia.CarreraId );
+
+            ViewData["ProfesorId"] = new SelectList(_context.Usuario.Where(x => x.Rol == 3), "UsuarioId", "Apellido", materia.ProfesorId);
+
             return View(materia);
         }
 
@@ -109,6 +127,7 @@ namespace BibliotecaULP.Controllers
                 try
                 {
                     _context.Update(materia);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -125,7 +144,9 @@ namespace BibliotecaULP.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "CarreraId", materia.CarreraId);
+
             ViewData["ProfesorId"] = new SelectList(_context.Usuario, "UsuarioId", "Clave", materia.ProfesorId);
+
             return View(materia);
         }
 
@@ -139,7 +160,9 @@ namespace BibliotecaULP.Controllers
 
             var materia = await _context.Materia
                 .Include(m => m.Carrera)
+
                 .Include(m => m.Profesor)
+
                 .FirstOrDefaultAsync(m => m.MateriaId == id);
             if (materia == null)
             {
@@ -155,8 +178,11 @@ namespace BibliotecaULP.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var materia = await _context.Materia.FindAsync(id);
+
             _context.Materia.Remove(materia);
+
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
