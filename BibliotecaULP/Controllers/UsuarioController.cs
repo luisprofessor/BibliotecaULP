@@ -8,22 +8,29 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace BibliotecaULP.Controllers
 {
+    [Authorize]
     public class UsuarioController : Controller
     {
         private readonly DataContext _context;
-        private readonly IHostingEnvironment environment;
+        private readonly IWebHostEnvironment environment;
         private readonly IConfiguration config;
 
-        public UsuarioController(DataContext contexto, IConfiguration config, IHostingEnvironment environment)
+        public UsuarioController(DataContext contexto, IConfiguration config, IWebHostEnvironment environment)
         {
             this._context = contexto;
             this.config = config;
             this.environment = environment;
         }
 
+        //[Authorize(Policy = "Administrador")]
         // GET: Usuarios
         public async Task<IActionResult> Index()
         {
@@ -76,7 +83,6 @@ namespace BibliotecaULP.Controllers
                     var nbreRnd = Guid.NewGuid();//posible nombre aleatorio
                     _context.Add(usuario);
                     _context.SaveChanges();
-                    usuario.UsuarioId = _context.Usuario.AsNoTracking().LastOrDefault().UsuarioId;
                     TempData["Id"] = usuario.UsuarioId;
                     if (usuario.ImagenFile != null && usuario.UsuarioId > 0)
                     {
@@ -191,10 +197,17 @@ namespace BibliotecaULP.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        /*
-        [HttpPost("login")]
-        //[AllowAnonymous]
-        public async Task<IActionResult> Login(LoginView loginView)
+        [AllowAnonymous]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        // POST: Usuario/Login
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Login(LoginView loginView)
         {
             try
             {
@@ -204,39 +217,52 @@ namespace BibliotecaULP.Controllers
                     prf: KeyDerivationPrf.HMACSHA1,
                     iterationCount: 1000,
                     numBytesRequested: 256 / 8));
-                var p = _context.Usuario.FirstOrDefault(x => x.Email == loginView.Email);
-                if (p == null || p.Clave != hashed)
+                var user = _context.Usuario.FirstOrDefault(x => x.Email == loginView.Email);
+                if (user == null || user.Clave != hashed)
                 {
-                    return BadRequest("Nombre de usuario o clave incorrecta");
+                    ViewBag.Mensaje = "Datos inválidos";
+                    return View();
                 }
-
-                else
+                var claims = new List<Claim>
                 {
-                    var key = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(config["TokenAuthentication:SecretKey"]));
-                    var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, p.Email),
-                        new Claim("FullName", p.Nombre + " " + p.Apellido),
-                        new Claim(ClaimTypes.Role, "Usuario"),
-                    };
+                    new Claim(ClaimTypes.Name, user.Email),
+                    new Claim("FullName", user.Nombre + " " + user.Apellido),
+                    new Claim(ClaimTypes.Role, user.RolNombre),
+                    new Claim("Id", user.UsuarioId + ""),
+                };
 
-                    var token = new JwtSecurityToken(
-                        issuer: config["TokenAuthentication:Issuer"],
-                        audience: config["TokenAuthentication:Audience"],
-                        claims: claims,
-                        expires: DateTime.Now.AddMinutes(60),
-                        signingCredentials: credenciales
-                    );
-                    return Ok(new JwtSecurityTokenHandler().WriteToken(token));
-                }
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                    AllowRefresh = true,
+                };
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
+                return RedirectToAction(nameof(Index), "Home");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                ViewBag.Error = ex.Message;
+                ViewBag.StackTrate = ex.StackTrace;
+                ModelState.AddModelError("", ex.Message);
+                return View();
             }
         }
-        */
+
+        [AllowAnonymous]
+        [Route("salir", Name = "logout")]
+        // GET: Home/Logout
+        public async Task<ActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+        }
         private bool UsuarioExists(int id)
         {
             return _context.Usuario.Any(e => e.UsuarioId == id);

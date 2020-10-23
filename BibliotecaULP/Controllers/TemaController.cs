@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BibliotecaULP.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BibliotecaULP.Controllers
 {
+    [Authorize]
     public class TemaController : Controller
     {
         private readonly DataContext _context;

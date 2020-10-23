@@ -9,9 +9,11 @@ using BibliotecaULP.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BibliotecaULP.Controllers
 {
+    [Authorize]
     public class DocumentoController : Controller
     {
         private readonly DataContext _context;
