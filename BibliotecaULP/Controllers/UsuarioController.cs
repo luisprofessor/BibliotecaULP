@@ -263,6 +263,51 @@ namespace BibliotecaULP.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Home");
         }
+
+        public ActionResult Perfil()
+        {
+            ViewData["Title"] = "Mi perfil";
+            var u = _context.Usuario.FirstOrDefault(x => x.Email == User.Identity.Name);
+            ViewBag.Roles = Usuario.ObtenerRoles();
+            return View(u);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Perfil(Usuario user)
+        {
+            try
+            {
+                var usuario = _context.Usuario.FirstOrDefault(x => x.Email == User.Identity.Name);
+                usuario.ImagenFile = user.ImagenFile;
+                if (usuario.ImagenFile != null && usuario.UsuarioId > 0)
+                {
+                    string wwwPath = environment.WebRootPath;
+                    string path = Path.Combine(wwwPath, "Uploads");
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+                    string fileName = "avatar_" + usuario.UsuarioId + Path.GetExtension(usuario.ImagenFile.FileName);
+                    string pathCompleto = Path.Combine(path, fileName);
+                    usuario.Imagen = Path.Combine("/Uploads", fileName);
+                    using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+                    {
+                        usuario.ImagenFile.CopyTo(stream);
+                    }
+                    _context.Update(usuario);
+                    _context.SaveChanges();
+                }           
+                return RedirectToAction(nameof(Index));
+
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+                TempData["StackTrace"] = ex.StackTrace;
+                return RedirectToAction(nameof(Index));
+            }
+        }
         private bool UsuarioExists(int id)
         {
             return _context.Usuario.Any(e => e.UsuarioId == id);
