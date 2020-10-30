@@ -8,64 +8,56 @@
     <environment include="Development">
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
-              crossorigin="anonymous"
-              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"/>
+      
     </environment>
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/asd.css" />
+
 </head>
 <body>
-    <nav class="light-blue lighten-2 nav-extended">
-        <div class="nav-wrapper">
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="brand-logo text-white">CANDACE</a>
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <form>
-                <div class="input-field">
-                    <input id="search" type="search" required>
-                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                    <i class="material-icons">close</i>
-                </div>
-            </form>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                @if (!User.Identity.IsAuthenticated)
-                {
-                    <li><a asp-area="" asp-controller="Usuario" asp-action="Login" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Login</a></li>
-                }
-                else
-                {
-                    <li><a asp-area="" asp-controller="Documento" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Documentos</a></li>
-                    <li><a asp-area="" asp-controller="Usuario" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">account_box</i>Usuarios</a></li>
-                    <li><a asp-area="" asp-controller="Tipo" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">weekend</i>Tipos</a></li>
-                    <li><a asp-area="" asp-controller="Tema" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">assignment</i>Temas</a></li>
-                    <li><a asp-area="" asp-controller="Carrera" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">star</i>Carrera</a></li>
-                    <li><a asp-area="" asp-controller="Materia" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Materia</a></li>
-                    <li><a asp-area="" asp-controller="Instituto" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Instituto</a></li>
-                    <li><a asp-area="" asp-controller="Usuario" asp-action="Perfil" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Perfil</a></li>
-                    <li><a asp-area="" asp-controller="Usuario" asp-action="Logout" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Logout</a></li>
-                    <!--<li style="float:right" class="waves-effect waves-light"><a id="abrir"><i class="large material-icons left">menu</i></a></li>-->
-                }
-            </ul>
-        </div>
-        <div class="nav-content">
-            <ul class="tabs tabs-transparent">
-                <li class="tab"><a href="#test1">Test 1</a></li>
-                <li class="tab"><a class="active" href="#test2">Test 2</a></li>
-                <li class="tab disabled"><a href="#test3">Disabled Tab</a></li>
-                <li class="tab"><a href="#test4">Test 4</a></li>
-            </ul>
-        </div>
-    </nav>
 
-    <ul class="sidenav" id="mobile-demo">
-        @if (!User.Identity.IsAuthenticated)
-        {
-            <li><a asp-area="" asp-controller="Usuario" asp-action="Login" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Login</a></li>
-        }
-        else
-        {
-            <li><a asp-area="" asp-controller="Documento" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Documentos</a></li>
+    <div class="navbar-fixed">
+        <nav class="second">
+            <div class="nav-wrapper">
+                <ul style="">
+                    <li > <a style="" asp-area="" asp-controller="Home" asp-action="Index" class="brand-logo text-white"><img src="~/Logo/logo-ulp.png"  alt="Alternate Text" style="max-width:38%; max-height:38%; " /></a></li>
+
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li style="float:right"><a asp-area="" asp-controller="Usuario" asp-action="Login" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Login</a></li>
+                    }
+
+                </ul>
+                <form action="" method="post">
+                    <div class="input-field">
+                        <input id="search" type="search" name="search">
+                        <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                        <i class="material-icons">close</i>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="nav-content">
+                <ul class="tabs tabs-transparent">
+                    <li class="tab"><a href="#test1">Test 1</a></li>
+                    <li class="tab"><a class="active" href="#test2">Test 2</a></li>
+                    <li class="tab disabled"><a href="#test3">Disabled Tab</a></li>
+                    <li class="tab"><a href="#test4">Test 4</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+
+
+
+
+
+
+
+
+
+            <!-- <li><a asp-area="" asp-controller="Documento" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Documentos</a></li>
             <li><a asp-area="" asp-controller="Usuario" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">account_box</i>Usuarios</a></li>
             <li><a asp-area="" asp-controller="Tipo" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">weekend</i>Tipos</a></li>
             <li><a asp-area="" asp-controller="Tema" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">assignment</i>Temas</a></li>
@@ -74,9 +66,14 @@
             <li><a asp-area="" asp-controller="Instituto" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Instituto</a></li>
             <li><a asp-area="" asp-controller="Usuario" asp-action="Perfil" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Perfil</a></li>
             <li><a asp-area="" asp-controller="Usuario" asp-action="Logout" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Logout</a></li>
+            <!--<li style="float:right" class="waves-effect waves-light"><a id="abrir"><i class="large material-icons left">menu</i></a></li>-->
 
-        }
-    </ul>
+
+       
+        <!-- -->
+  
+
+
 
     <div class="container">
         <partial name="_CookieConsentPartial" />
@@ -85,11 +82,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - BibliotecaULP - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+ 
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>

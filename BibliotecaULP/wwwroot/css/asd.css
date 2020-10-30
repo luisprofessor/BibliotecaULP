@@ -1,0 +1,61 @@
+﻿:root {
+ 
+}
+body {
+    background-color: #f5f5f5;
+}
+nav {
+    padding: 0 10px 0 10px;
+    background-color: #004179;
+}
+
+.nav-wrapper {
+    background-color: #004179;
+}
+.second {
+    background-color: #004179;
+}
+.navbar-fixed {
+    background-color: #004179;
+}
+
+.nav-content {
+    background-color: #004179;
+}
+nav .right {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
+
+
+.nav-wrapper form {
+   margin-left: 130px;
+    width: 30%;
+}
+
+.nav-wrapper .input-field {
+    padding-top: 7px;
+}
+
+.nav-wrapper form #search {
+    height: 40px;
+}
+
+
+nav .right img {
+    margin: 17px;
+    height: 30px;
+    width: 30px;
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+nav .right .imgProfil a {
+    height: 64px;
+}
+
+.hidden {
+    display: none;
+}
