@@ -19,7 +19,7 @@
         <nav class="second">
             <div class="nav-wrapper">
                 <ul style="">
-                    <li > <a style="" asp-area="" asp-controller="Home" asp-action="Index" class="brand-logo text-white"><img src="~/Logo/logo-ulp.png"  alt="Alternate Text" style="max-width:38%; max-height:38%; " /></a></li>
+                    <li> <a style="" asp-area="" asp-controller="Home" asp-action="Index" class="brand-logo text-white"><img src="~/Logo/logo-ulp.png" alt="Alternate Text" style="max-width:38%; max-height:38%; " /></a></li>
 
                     @if (!User.Identity.IsAuthenticated)
                     {
@@ -57,21 +57,18 @@
 
 
 
-            <!-- <li><a asp-area="" asp-controller="Documento" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Documentos</a></li>
-            <li><a asp-area="" asp-controller="Usuario" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">account_box</i>Usuarios</a></li>
-            <li><a asp-area="" asp-controller="Tipo" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">weekend</i>Tipos</a></li>
-            <li><a asp-area="" asp-controller="Tema" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">assignment</i>Temas</a></li>
-            <li><a asp-area="" asp-controller="Carrera" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">star</i>Carrera</a></li>
-            <li><a asp-area="" asp-controller="Materia" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Materia</a></li>
-            <li><a asp-area="" asp-controller="Instituto" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Instituto</a></li>
-            <li><a asp-area="" asp-controller="Usuario" asp-action="Perfil" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Perfil</a></li>
-            <li><a asp-area="" asp-controller="Usuario" asp-action="Logout" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Logout</a></li>
-            <!--<li style="float:right" class="waves-effect waves-light"><a id="abrir"><i class="large material-icons left">menu</i></a></li>-->
+    <!-- <li><a asp-area="" asp-controller="Documento" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Documentos</a></li>
+    <li><a asp-area="" asp-controller="Usuario" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">account_box</i>Usuarios</a></li>
+    <li><a asp-area="" asp-controller="Tipo" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">weekend</i>Tipos</a></li>
+    <li><a asp-area="" asp-controller="Tema" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">assignment</i>Temas</a></li>
+    <li><a asp-area="" asp-controller="Carrera" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">star</i>Carrera</a></li>
+    <li><a asp-area="" asp-controller="Materia" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Materia</a></li>
+    <li><a asp-area="" asp-controller="Instituto" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Instituto</a></li>
+    <li><a asp-area="" asp-controller="Usuario" asp-action="Perfil" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Perfil</a></li>
+    <li><a asp-area="" asp-controller="Usuario" asp-action="Logout" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Logout</a></li>
+    <!--<li style="float:right" class="waves-effect waves-light"><a id="abrir"><i class="large material-icons left">menu</i></a></li>-->
+    <!-- -->
 
-
-       
-        <!-- -->
-  
 
 
 
@@ -82,7 +79,7 @@
         </main>
     </div>
 
- 
+
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -121,6 +118,7 @@
 
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/Tutorial.jsx" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

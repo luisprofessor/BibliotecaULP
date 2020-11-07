@@ -5,14 +5,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BibliotecaULP.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using React;
 
 namespace BibliotecaULP.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly DataContext _context;
+        private readonly IConfiguration config;
+        public HomeController(DataContext contexto, IConfiguration config)
         {
-            return View();
+            this._context = contexto;
+            this.config = config;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var dataContext = _context.Documento.Include(d => d.Materia).Include(d => d.Tema).Include(d => d.Tipo).Include(d => d.Usuario);
+            return View(await dataContext.ToListAsync());
         }
 
         public IActionResult Privacy()

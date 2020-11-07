@@ -17,6 +17,7 @@ namespace BibliotecaULP.Controllers
         private readonly DataContext _context;
         private readonly IConfiguration config;
 
+
         public CarreraController(DataContext contexto, IConfiguration config)
         {
             this._context = contexto;
