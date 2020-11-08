@@ -14,48 +14,34 @@
 
 </head>
 <body>
+    <nav class="nav-extended">
+        <div class="nav-wrapper">
+            <ul style="">
+                <li> <a style="" asp-area="" asp-controller="Home" asp-action="Index" class="brand-logo text-white"><img src="~/Logo/logo-ulp.png" alt="Alternate Text" style="max-width:38%; max-height:38%; " /></a></li>
 
-    <div class="navbar-fixed">
-        <nav class="second">
-            <div class="nav-wrapper">
-                <ul style="">
-                    <li> <a style="" asp-area="" asp-controller="Home" asp-action="Index" class="brand-logo text-white"><img src="~/Logo/logo-ulp.png" alt="Alternate Text" style="max-width:38%; max-height:38%; " /></a></li>
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <li style="float:right"><a asp-area="" asp-controller="Usuario" asp-action="Login" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Login</a></li>
+                }
 
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <li style="float:right"><a asp-area="" asp-controller="Usuario" asp-action="Login" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Login</a></li>
-                    }
-
-                </ul>
-                <form action="" method="post">
-                    <div class="input-field">
-                        <input id="search" type="search" name="search">
-                        <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                        <i class="material-icons">close</i>
-                    </div>
-                </form>
-
-            </div>
-
-            <div class="nav-content">
-                <ul class="tabs tabs-transparent">
-                    <li class="tab"><a href="#test1">Test 1</a></li>
-                    <li class="tab"><a class="active" href="#test2">Test 2</a></li>
-                    <li class="tab disabled"><a href="#test3">Disabled Tab</a></li>
-                    <li class="tab"><a href="#test4">Test 4</a></li>
-                </ul>
-            </div>
-        </nav>
-    </div>
-
-
-
-
-
-
-
-
-
+            </ul>
+            <form action="" method="post">
+                <div class="input-field">
+                    <input id="search" type="search" name="search">
+                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                </div>
+            </form>
+        </div>
+        <div class="nav-content">
+            <ul class="tabs tabs-transparent">
+                <li class="tab"><a href="#test1">Test 1</a></li>
+                <li class="tab"><a class="active" href="#test2">Test 2</a></li>
+                <li class="tab disabled"><a href="#test3">Disabled Tab</a></li>
+                <li class="tab"><a href="#test4">Test 4</a></li>
+            </ul>
+        </div>
+    </nav>
 
     <!-- <li><a asp-area="" asp-controller="Documento" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">accessibility</i>Documentos</a></li>
     <li><a asp-area="" asp-controller="Usuario" asp-action="Index" class="waves-effect waves-light"><i class="material-icons left">account_box</i>Usuarios</a></li>
@@ -67,18 +53,13 @@
     <li><a asp-area="" asp-controller="Usuario" asp-action="Perfil" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Perfil</a></li>
     <li><a asp-area="" asp-controller="Usuario" asp-action="Logout" class="waves-effect waves-light"><i class="material-icons left">account_circle</i>Logout</a></li>
     <!--<li style="float:right" class="waves-effect waves-light"><a id="abrir"><i class="large material-icons left">menu</i></a></li>-->
-    <!-- -->
-
-
-
-
-    <div class="container">
-        <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
+    <main role="main">
+        <div class="mt-3">
+            <div class="m-1 p-1">
+                @RenderBody()
+            </div>
+        </div>
+    </main>
 
 
     <environment include="Development">
