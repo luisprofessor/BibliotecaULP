@@ -6,30 +6,30 @@ body {
 }
 nav {
     padding: 0 10px 0 10px;
-    background-color: rgba(0, 65, 121, 0.30);
+    background-color: #004179;
 }
 
 .nav-wrapper {
-    background-color: rgba(0, 65, 121, 0.30);
+    background-color: #004179;
 }
 .second {
-    background-color: rgba(0, 65, 121, 0.30);
+    background-color: #004179;
 }
 .navbar-fixed {
-    background-color: rgba(0, 65, 121, 0.30);
+    background-color: #004179;
 }
 .navbar-extended {
-    background-color: rgba(0, 65, 121, 0.30);
+    background-color: #004179;
 }
 .nav-extended {
-    background-color: rgba(0, 65, 121, 0.30);
+    background-color: #004179;
 }
 
 nav-extended {
-    background-color: rgba(0, 65, 121, 0.30);
+    background-color: #004179;
 }
 .nav-content {
-    background-color: rgba(0, 65, 121, 0.30);
+    background-color: #004179;
 }
 nav .right {
     position: absolute;
@@ -70,5 +70,5 @@ nav .right .imgProfil a {
 }
 
 .asd {
-    background-color: rgba(0, 65, 121, 0.30);
+    background-color: #004179;
 }
