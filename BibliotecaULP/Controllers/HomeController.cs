@@ -22,8 +22,9 @@ namespace BibliotecaULP.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var dataContext = _context.Documento.Include(d => d.Materia).Include(d => d.Tema).Include(d => d.Tipo).Include(d => d.Usuario);
-            return View(await dataContext.ToListAsync());
+            /*var dataContext = _context.Documento.Include(d => d.Materia).Include(d => d.Tema).Include(d => d.Tipo).Include(d => d.Usuario);
+            return View(await dataContext.ToListAsync());*/
+            return View();
         }
 
         public IActionResult Privacy()

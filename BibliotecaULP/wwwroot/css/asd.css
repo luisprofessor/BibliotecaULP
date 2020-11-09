@@ -6,21 +6,30 @@ body {
 }
 nav {
     padding: 0 10px 0 10px;
-    background-color: #004179;
+    background-color: rgba(0, 65, 121, 0.30);
 }
 
 .nav-wrapper {
-    background-color: #004179;
+    background-color: rgba(0, 65, 121, 0.30);
 }
 .second {
-    background-color: #004179;
+    background-color: rgba(0, 65, 121, 0.30);
 }
 .navbar-fixed {
-    background-color: #004179;
+    background-color: rgba(0, 65, 121, 0.30);
+}
+.navbar-extended {
+    background-color: rgba(0, 65, 121, 0.30);
+}
+.nav-extended {
+    background-color: rgba(0, 65, 121, 0.30);
 }
 
+nav-extended {
+    background-color: rgba(0, 65, 121, 0.30);
+}
 .nav-content {
-    background-color: #004179;
+    background-color: rgba(0, 65, 121, 0.30);
 }
 nav .right {
     position: absolute;
@@ -58,4 +67,8 @@ nav .right .imgProfil a {
 
 .hidden {
     display: none;
+}
+
+.asd {
+    background-color: rgba(0, 65, 121, 0.30);
 }
