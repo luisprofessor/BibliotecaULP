@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BibliotecaULP.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CarreraController : Controller
     {
         private readonly DataContext _context;

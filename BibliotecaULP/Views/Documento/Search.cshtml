@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewData["Title"] = "Search";
+}
+
+<style>
+    .container-1 {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        border-style: solid;
+        border-width: 1px 1px 1px 1px;
+        border-color: lightgray;
+        border-radius: 10px;
+        margin-top: 10px;
+        width: 75%;
+        /*
+      align-items:flex-start;
+      align-items:flex-end;
+
+
+      flex-direction:column;
+      */
+    }
+
+    .box-1 {
+        flex: 1;
+        order: 1;
+        padding-left: 25px;
+    }
+
+    .box-2 {
+        flex: 1;
+        order: 1;
+    }
+
+    .box-3 {
+        flex: 1;
+        order: 2;
+    }
+
+    .ultimosdocumentos {
+        margin-top: 40px;
+    }
+
+    .section-right {
+        flex-direction: column;
+        order: 2;
+        margin-left: 17px;
+        align-items: flex-start;
+        padding-right: 25px;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    .titulo-box {
+        padding-top: 10px;
+    }
+
+    .texto-descripcion {
+        font-size: 12px;
+    }
+
+    .texto-footer {
+        font-size: 11px;
+        padding-top: 3px;
+    }
+
+    .about {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        background-color: white;
+        border-style: solid;
+        border-width: 1px 1px 1px 1px;
+        border-color: lightgray;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    .right-column {
+        margin-top: 60px;
+    }
+
+    .right-1 {
+        flex: 1;
+        order: 1;
+    }
+
+    .right-2 {
+        flex: 1;
+        order: 2;
+    }
+
+    .right-3 {
+        flex: 1;
+        order: 3;
+    }
+
+    .texto-right {
+        padding-right: 20px;
+    }
+
+    .left-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: white;
+        border-style: solid;
+        border-width: 1px 1px 1px 1px;
+        border-color: lightgray;
+        border-radius: 10px;
+        margin-top: 40px;
+    }
+
+    .fleximage {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        width: 90%;
+        padding-top: 30px;
+    }
+
+    .input-field {
+        padding-top: 7px;
+    }
+
+    form #search {
+        height: 40px;
+    }
+</style>
+
+
+<div id="home">
+    <div class="row">
+        <div class="col s4">
+            <form action="" method="post">
+                <div class="input-field">
+                    <input id="search" type="search" name="search">
+                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                </div>
+            </form>
+        </div>
+        <div class="col s8">
+            <div class="container-1" style="">
+                <div class="box-1">
+                    <img src="~/icons/pdf.png" />
+                </div>
+                <div class="section-right">
+                    <div class="box-2" style=" margin-top: -20px">
+
+                        <h5 class="titulo-box">U1 - Metodologias de Desarrollo</h5>
+                        <p class="texto-descripcion">¿Que es una metodologia de desarrollo? Primeros Pasos en la materia</p>
+                    </div>
+                    <div class="box-3">
+                        <p class="texto-footer" style="margin-bottom:10px">Autor: <a>Saez juan</a></p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

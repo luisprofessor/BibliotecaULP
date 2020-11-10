@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace BibliotecaULP.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class UsuarioController : Controller
     {
         private readonly DataContext _context;
@@ -197,7 +197,7 @@ namespace BibliotecaULP.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [AllowAnonymous]
+      //  [AllowAnonymous]
         public ActionResult Login()
         {
             return View();
@@ -205,7 +205,7 @@ namespace BibliotecaULP.Controllers
 
         // POST: Usuario/Login
         [HttpPost]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginView loginView)
         {

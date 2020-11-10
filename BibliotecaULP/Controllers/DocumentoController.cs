@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BibliotecaULP.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class DocumentoController : Controller
     {
         private readonly DataContext _context;
@@ -224,6 +224,22 @@ namespace BibliotecaULP.Controllers
                 return RedirectToAction(nameof(Index));
             }
            
+        }
+
+        // GET: Documento/Search
+        public IActionResult Search()
+        {
+            
+            return View();
+        }
+
+        // POST: Documento/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search([Bind("DocumentoId,Nombre,UsuarioId,TipoId,TemaId,MateriaId,FechaSubida,Archivo")] Documento documento)
+        {
+           
+            return View(documento);
         }
 
         private bool DocumentoExists(int id)
