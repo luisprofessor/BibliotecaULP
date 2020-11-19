@@ -154,5 +154,14 @@ namespace BibliotecaULP.Controllers
         {
             return _context.Carrera.Any(e => e.CarreraId == id);
         }
+
+        [HttpPost]
+        public IActionResult GetCarrerasId(int id)
+        {
+            var Carreras = _context.Carrera.Include(x => x.Instituto).Where(p => p.InstitutoId == id).ToList();
+
+            return Json(Carreras);
+        }
+
     }
 }

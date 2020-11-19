@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using System.Dynamic;
 
 namespace BibliotecaULP.Controllers
 {
@@ -17,10 +18,10 @@ namespace BibliotecaULP.Controllers
     public class DocumentoController : Controller
     {
         private readonly DataContext _context;
-        private readonly IHostingEnvironment environment;
+        private readonly IWebHostEnvironment environment;
         private readonly IConfiguration config;
 
-        public DocumentoController(DataContext context,IConfiguration config, IHostingEnvironment environment)
+        public DocumentoController(DataContext context,IConfiguration config, IWebHostEnvironment environment)
         {
             _context = context;
             this.config = config;
@@ -70,9 +71,13 @@ namespace BibliotecaULP.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> Create([Bind("DocumentoId,Nombre,UsuarioId,TipoId,TemaId,MateriaId,FechaSubida,Archivo")] Documento documento)
         {
+            Startup.Progress = 0;
+
+            long totalBytes = documento.Archivo.Length;
+
             if (ModelState.IsValid)
             {
                 _context.Add(documento);
@@ -90,13 +95,32 @@ namespace BibliotecaULP.Controllers
                         Directory.CreateDirectory(path);
                     }
 
-                    string fileName = documento.Nombre + Path.GetExtension(documento.Archivo.FileName);
+                    string fileName = documento.Nombre + documento.DocumentoId + Path.GetExtension(documento.Archivo.FileName);
 
                     string pathCompleto = Path.Combine(path, fileName);
 
-                    using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+                    byte[] buffer = new byte[16 * 1024];
+
+                    /*     using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+                         {
+                             documento.Archivo.CopyTo(stream);
+                         }*/
+
+                    using (FileStream output = System.IO.File.Create(pathCompleto))
                     {
-                        documento.Archivo.CopyTo(stream);
+                        using (Stream input = documento.Archivo.OpenReadStream())
+                        {
+                            long totalReadBytes = 0;
+                            int readBytes;
+
+                            while ((readBytes = input.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                await output.WriteAsync(buffer, 0, readBytes);
+                                totalReadBytes += readBytes;
+                                Startup.Progress = (int)((float)totalReadBytes / (float)totalBytes * 100.0);
+                                await Task.Delay(10);
+                            }
+                        }
                     }
 
                     documento.DireccionDocumento = "Uploads/Documentos/" + fileName + documento.DocumentoId;
@@ -106,7 +130,9 @@ namespace BibliotecaULP.Controllers
 
                 _context.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
+                return this.Content("success");
+
+                //return RedirectToAction(nameof(Index));
             }
 
             ViewData["MateriaId"] = new SelectList(_context.Materia, "MateriaId", "MateriaId", documento.MateriaId);
@@ -143,6 +169,7 @@ namespace BibliotecaULP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("DocumentoId,Nombre,UsuarioId,TipoId,TemaId,MateriaId,FechaSubida,DireccionDocumento")] Documento documento)
         {
+
             if (id != documento.DocumentoId)
             {
                 return NotFound();
@@ -153,6 +180,7 @@ namespace BibliotecaULP.Controllers
                 try
                 {
                     _context.Update(documento);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -229,22 +257,51 @@ namespace BibliotecaULP.Controllers
         // GET: Documento/Search
         public IActionResult Search()
         {
-            
+         //   ViewData["MateriaId"] = new SelectList(_context.Materia, "materiaId", "Nombre");
+           // ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "Nombre");
+            ViewData["InstitutoId"] = new SelectList(_context.Instituto, "InstitutoId", "Nombre");
+            ViewBag.Tipos = _context.Tipo.ToList();
             return View();
         }
 
         // POST: Documento/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Search([Bind("DocumentoId,Nombre,UsuarioId,TipoId,TemaId,MateriaId,FechaSubida,Archivo")] Documento documento)
+        public async Task<IActionResult> Search([Bind("Nombre,MateriaId,CarreraId,InstitutoId")] SearchView search)
         {
            
-            return View(documento);
+            return View(search);
         }
 
         private bool DocumentoExists(int id)
         {
             return _context.Documento.Any(e => e.DocumentoId == id);
+        }
+
+
+
+        [HttpPost]
+        public ActionResult Progress()
+        {
+            return this.Content(Startup.Progress.ToString());
+        }
+
+        private string EnsureCorrectFilename(string filename)
+        {
+            if (filename.Contains("\\"))
+                filename = filename.Substring(filename.LastIndexOf("\\") + 1);
+
+            return filename;
+        }
+
+        private string GetPathAndFilename(string filename)
+        {
+            string path = this.environment.WebRootPath + "\\uploads\\documentos";
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            return path + filename;
         }
     }
 }

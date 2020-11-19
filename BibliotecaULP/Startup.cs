@@ -23,6 +23,8 @@ namespace BibliotecaULP
 {
     public class Startup
     {
+        public static int Progress { get; set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;

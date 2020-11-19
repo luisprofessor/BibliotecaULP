@@ -25,5 +25,7 @@ namespace BibliotecaULP.Models
         public Usuario Profesor { get; set; }
 
         public string Nombre { get; set; }
+
+        public int Año { get; set; }
     }
 }

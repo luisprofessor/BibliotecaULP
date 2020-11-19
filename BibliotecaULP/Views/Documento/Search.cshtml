@@ -1,11 +1,19 @@
-﻿
+﻿@model BibliotecaULP.Models.SearchView
+
+
 @{
     ViewData["Title"] = "Search";
 }
+<head>
+    <script src="//ajax.aspnetcdn.com/ajax/jquery/jquery-1.11.3.min.js"></script>
+
+    <script src="/js/SearchDrops.js"></script>
+
+</head>
 
 <style>
-    .bold{
-       font-weight: bold;
+    .bold {
+        font-weight: bold;
     }
 </style>
 
@@ -13,7 +21,7 @@
     <div class="row">
         <div class="col s4">
             <div class="container">
-                <form action="" method="post">
+                <form asp-action="Search" method="post">
                     <div class="input-field">
                         <i class="material-icons prefix">search</i>
                         <input id="icon_prefix" type="text" class="validate">
@@ -36,17 +44,24 @@
                     <div class="bold">
                         Filtros
                     </div>
-                    <select>
+                    <select asp-for="InstitutoId" class="form-control" asp-items="ViewBag.InstitutoId" id="InstitutoId" name="InstitutoId" onchange="drop1();">
                         <option value="" disabled selected>Instituto</option>
-                        <option value="1">Instituto tecnologico</option>
-                        <option value="2">Instituto de artes</option>
                     </select>
-                    <div class="divider"></div>
-                    <select>
+
+                    <!--  <div class="divider"></div>-->
+                    <select id="CarreraId" name="CarreraId" contenteditable="false" onchange="drop2();">
                         <option value="" disabled selected>Carrera</option>
-                        <option value="1">Tec. desarrollo de software</option>
-                        <option value="2">Tec. desarrollo de videojuegos</option>
-                        <option value="3">Tec. en turismo</option>
+                    </select>
+                    <select onchange="drop2();" id="Año" name="Año">
+                        <option value="" id="Año" name="Año" disabled selected>Año</option>
+                        <option value="1">1er Año</option>
+                        <option value="2">2do Año</option>
+                        <option value="3">3er Año</option>
+                    </select>
+                    <select id="Materia" name="Materia">
+                        <option value="" disabled selected>Materia</option>
+
+
                     </select>
                     <div class="z-depth-2">
                         <ul class="collection with-header">
@@ -55,67 +70,59 @@
                             </li>
                             <li class="collection-item">
                                 <div class="input-field">
-                                    <div>
-                                        <label>
-                                            <input type="checkbox" class="filled-in" />
-                                            <span>Opcion 1</span>
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <label>
-                                            <input type="checkbox" class="filled-in" />
-                                            <span>Opcion 2</span>
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <label>
-                                            <input type="checkbox" class="filled-in" />
-                                            <span>Opcion 3</span>
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <label>
-                                            <input type="checkbox" class="filled-in" />
-                                            <span>Opcion 4</span>
-                                        </label>
-                                    </div>
+                                    @foreach (var item in (IList<Tipo>)ViewBag.Tipos)
+                                    {
+                                        <div>
+                                            <label>
+                                                <input type="checkbox" class="filled-in" />
+                                                <span>@item.Nombre</span>
+                                            </label>
+                                        </div>
+                                    }
+
                                 </div>
                             </li>
-                            <li class="collection-header grey lighten-1 valign-wrapper">
-                                <i class="material-icons">description</i> <span class="bold">Temas</span>
-                            </li>
-                            <li class="collection-item">
-                                <div class="input-field">
-                                    <div>
-                                        <label>
-                                            <input type="checkbox" class="filled-in" />
-                                            <span>Opcion 1</span>
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <label>
-                                            <input type="checkbox" class="filled-in" />
-                                            <span>Opcion 2</span>
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <label>
-                                            <input type="checkbox" class="filled-in" />
-                                            <span>Opcion 3</span>
-                                        </label>
-                                    </div>
-                                    <div>
-                                        <label>
-                                            <input type="checkbox" class="filled-in" />
-                                            <span>Opcion 4</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </li>
+                            <!-- <li class="collection-header grey lighten-1 valign-wrapper">
+                        <i class="material-icons">description</i> <span class="bold">Temas</span>
+                    </li>
+                    <li class="collection-item">
+                        <div class="input-field">
+                            <div>
+                                <label>
+                                    <input type="checkbox" class="filled-in" />
+                                    <span>Opcion 1</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" class="filled-in" />
+                                    <span>Opcion 2</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" class="filled-in" />
+                                    <span>Opcion 3</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" class="filled-in" />
+                                    <span>Opcion 4</span>
+                                </label>
+                            </div>
+                        </div>
+                    </li>-->
                         </ul>
+
+
                     </div>
-                </form>
-            </div>           
+
+                <div class="form-group">
+                    <input type="submit" value="Buscar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
         </div>
         <div class="col s7">
             <div class="card horizontal valign-wrapper">
@@ -130,7 +137,7 @@
                         <div>¿Que es una metodologia de desarrollo? Primeros Pasos en la materia</div>
                     </div>
                     <div class="card-action">
-                        <span>Autor: <a href="#" class="blue-text text-darken-4" >Saez Cristina</a></span>
+                        <span>Autor: <a href="#" class="blue-text text-darken-4">Saez Cristina</a></span>
                         <span>Tema: <a href="#" class="blue-text text-darken-4">Casos de Usos</a></span>
                         <span>Tipo: <a href="#" class="blue-text text-darken-4">PDF</a></span>
                     </div>
@@ -177,7 +184,7 @@
 </div>
 
 <script>
-  $(document).ready(function(){
-    $('select').formSelect();
-  });
+    $(document).ready(function () {
+        $('select').formSelect();
+    });
 </script>

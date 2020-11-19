@@ -74,7 +74,7 @@ namespace BibliotecaULP.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MateriaId,CarreraId,ProfesorId,Nombre")] Materia materia)
+        public async Task<IActionResult> Create([Bind("MateriaId,CarreraId,ProfesorId,Nombre,Año")] Materia materia)
         {
             if (ModelState.IsValid)
             {
@@ -117,7 +117,7 @@ namespace BibliotecaULP.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("MateriaId,CarreraId,ProfesorId,Nombre")] Materia materia)
+        public async Task<IActionResult> Edit(int id, [Bind("MateriaId,CarreraId,ProfesorId,Nombre,Año")] Materia materia)
         {
             if (id != materia.MateriaId)
             {
@@ -191,6 +191,14 @@ namespace BibliotecaULP.Controllers
         private bool MateriaExists(int id)
         {
             return _context.Materia.Any(e => e.MateriaId == id);
+        }
+
+        [HttpPost]
+        public IActionResult GetMateriasId(int idCarrera, int año)
+        {
+            var Materias = _context.Materia.Include(x => x.Carrera).Where(p => p.CarreraId == idCarrera && p.Año == año).ToList();
+
+            return Json(Materias);
         }
     }
 }
