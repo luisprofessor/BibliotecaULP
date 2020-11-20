@@ -15,7 +15,8 @@
 <hr />
 <div class="row container">
     <div class="col-md-4">
-        <a href=""</a>
+       
+       
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -23,6 +24,7 @@
                 <input asp-for="Nombre" class="form-control" id="Nombre" name="Nombre" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
+            <div id="emotiontags" class="chips chips-autocomplete "></div>
             <div class="form-group">
                 <label asp-for="UsuarioId" class="control-label"></label>
                 <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId" id="UsuarioId" name="UsuarioId"></select>
