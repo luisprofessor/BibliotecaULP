@@ -60,11 +60,13 @@ namespace BibliotecaULP.Controllers
         // GET: Documento/Create
         public IActionResult Create()
         {
-            ViewData["MateriaId"] = new SelectList(_context.Materia, "MateriaId", "MateriaId");
-            ViewData["TemaId"] = new SelectList(_context.Tema, "TemaId", "TemaId");
-            ViewData["TipoId"] = new SelectList(_context.Tipo, "TipoId", "TipoId");
+            //ViewData["MateriaId"] = new SelectList(_context.Materia, "MateriaId", "Nombre");
+            //ViewData["TemaId"] = new SelectList(_context.Tema, "TemaId", "Nombre");
+            ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "Nombre");
+            ViewData["TipoId"] = new SelectList(_context.Tipo, "TipoId", "Nombre");
             ViewData["UsuarioId"] = new SelectList(_context.Usuario, "UsuarioId", "Apellido");
             return View();
+            
         }
 
         // POST: Documento/Create
@@ -76,6 +78,9 @@ namespace BibliotecaULP.Controllers
         {
             //Startup.Progress = 0;
             //long totalBytes = documento.Archivo.Length;
+            var Materias = _context.Materia.Include(p => p.Carrera).FirstOrDefault(x => x.MateriaId == documento.MateriaId) ;
+
+           
 
             if (ModelState.IsValid)
             {
@@ -91,7 +96,7 @@ namespace BibliotecaULP.Controllers
                     {
                         Directory.CreateDirectory(path);
                     }
-                    string fileName = documento.Materia.Nombre + documento.Materia.Carrera.Nombre + documento.DocumentoId + Path.GetExtension(documento.Archivo.FileName);
+                    string fileName = Materias.Nombre + Materias.Carrera.Nombre + documento.DocumentoId + Path.GetExtension(documento.Archivo.FileName);
                     string pathCompleto = Path.Combine(path, fileName);
 
                     //byte[] buffer = new byte[16 * 1024];
@@ -128,11 +133,12 @@ namespace BibliotecaULP.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["MateriaId"] = new SelectList(_context.Materia, "MateriaId", "MateriaId", documento.MateriaId);
-            ViewData["TemaId"] = new SelectList(_context.Tema, "TemaId", "TemaId", documento.TemaId);
-            ViewData["TipoId"] = new SelectList(_context.Tipo, "TipoId", "TipoId", documento.TipoId);
-            ViewData["UsuarioId"] = new SelectList(_context.Usuario, "UsuarioId", "Apellido", documento.UsuarioId);
-            return View(documento);
+            //ViewData["MateriaId"] = new SelectList(_context.Materia, "MateriaId", "Nombre");
+            //ViewData["TemaId"] = new SelectList(_context.Tema, "TemaId", "Nombre");
+            ViewData["CarrreraId"] = new SelectList(_context.Carrera, "CarreraId", "Nombre");
+            ViewData["TipoId"] = new SelectList(_context.Tipo, "TipoId", "Nombre");
+            ViewData["UsuarioId"] = new SelectList(_context.Usuario, "UsuarioId", "Apellido");
+            return View();
         }
 
         // GET: Documento/Edit/5

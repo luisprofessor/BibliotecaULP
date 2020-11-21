@@ -9,9 +9,14 @@
     var materiaId = document.getElementById('MateriaId').value;
     var fecha = document.getElementById('fecha').value;
     var bar = document.getElementById('determinate');
+  
     var files = input.files;
     var formdata = new FormData();
     var bandera = true;
+    
+   
+
+
 
     for (var i = 0; i != files.length; i++) {
         formdata.append("Archivo", files[i]);
@@ -85,7 +90,7 @@
                     }
                 );
             },
-            22
+            25
         );
     }
 

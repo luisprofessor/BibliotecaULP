@@ -27,20 +27,8 @@
                         <input id="icon_prefix" type="text" class="validate">
                         <label for="icon_prefix">Buscar</label>
                     </div>
-                    <div class="section">
-                        <div class="chip">
-                            Tag
-                            <i class="close material-icons">close</i>
-                        </div>
-                        <div class="chip">
-                            Tag1
-                            <i class="close material-icons">close</i>
-                        </div>
-                        <div class="chip">
-                            Tag2
-                            <i class="close material-icons">close</i>
-                        </div>
-                    </div>
+                    
+                    
                     <div class="bold">
                         Filtros
                     </div>
@@ -49,7 +37,7 @@
                     </select>
 
                     <!--  <div class="divider"></div>-->
-                    <select id="CarreraId" name="CarreraId" contenteditable="false" onchange="drop2();">
+                    <select asp-for ="CarreraId" id="CarreraId" name="CarreraId" contenteditable="false" onchange="drop2();">
                         <option value="" disabled selected>Carrera</option>
                     </select>
                     <select onchange="drop2();" id="Año" name="Año">
@@ -83,45 +71,42 @@
                                 </div>
                             </li>
                             <!-- <li class="collection-header grey lighten-1 valign-wrapper">
-                        <i class="material-icons">description</i> <span class="bold">Temas</span>
-                    </li>
-                    <li class="collection-item">
-                        <div class="input-field">
-                            <div>
-                                <label>
-                                    <input type="checkbox" class="filled-in" />
-                                    <span>Opcion 1</span>
-                                </label>
-                            </div>
-                            <div>
-                                <label>
-                                    <input type="checkbox" class="filled-in" />
-                                    <span>Opcion 2</span>
-                                </label>
-                            </div>
-                            <div>
-                                <label>
-                                    <input type="checkbox" class="filled-in" />
-                                    <span>Opcion 3</span>
-                                </label>
-                            </div>
-                            <div>
-                                <label>
-                                    <input type="checkbox" class="filled-in" />
-                                    <span>Opcion 4</span>
-                                </label>
-                            </div>
-                        </div>
-                    </li>-->
+                <i class="material-icons">description</i> <span class="bold">Temas</span>
+            </li>
+            <li class="collection-item">
+                <div class="input-field">
+                    <div>
+                        <label>
+                            <input type="checkbox" class="filled-in" />
+                            <span>Opcion 1</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="checkbox" class="filled-in" />
+                            <span>Opcion 2</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="checkbox" class="filled-in" />
+                            <span>Opcion 3</span>
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="checkbox" class="filled-in" />
+                            <span>Opcion 4</span>
+                        </label>
+                    </div>
+                </div>
+            </li>-->
                         </ul>
 
 
                     </div>
 
-                <div class="form-group">
-                    <input type="submit" value="Buscar" class="btn btn-primary" />
-                </div>
-            </form>
+                </form>
         </div>
         </div>
         <div class="col s7">

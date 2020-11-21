@@ -4,17 +4,18 @@
     ViewData["Title"] = "Create";
 }
 <head>
-   
+
 
     <script src="//ajax.aspnetcdn.com/ajax/jquery/jquery-1.11.3.min.js"></script>
-    <script src="/js/aspnetcorefileuploading.js"></script>
+    <!--<script src="/js/aspnetcorefileuploading.js"></script>-->
+    <script src ="~/js/Create.js"></script>
 </head>
 <h1>Create</h1>
 
 <h4>Documento</h4>
 <hr />
 <div class="row container">
-    <div class="col-md-4">
+    <div class="col s12">
        
        
         <form asp-action="Create" enctype="multipart/form-data">
@@ -24,7 +25,7 @@
                 <input asp-for="Nombre" class="form-control" id="Nombre" name="Nombre" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
-            <div id="emotiontags" class="chips chips-autocomplete "></div>
+
             <div class="form-group">
                 <label asp-for="UsuarioId" class="control-label"></label>
                 <select asp-for="UsuarioId" class="form-control" asp-items="ViewBag.UsuarioId" id="UsuarioId" name="UsuarioId"></select>
@@ -33,37 +34,38 @@
                 <label asp-for="TipoId" class="control-label"></label>
                 <select asp-for="TipoId" class="form-control" asp-items="ViewBag.TipoId" id="TipoId" name="TipoId"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="TemaId" class="control-label"></label>
-                <select asp-for="TemaId" class="form-control" asp-items="ViewBag.TemaId" id="TemaId" name="TemaId"></select>
+            <select id="CarreraId" name="CarreraId" asp-items="ViewBag.CarreraId" contenteditable="false" onchange="dropMaterias();">
+                <option value="" disabled selected>Carrera</option>
+            </select>
+            <select class="form-group col s12" id="Año" name="Año" onchange="dropAño();">
+                <option value="" id="Año" name="Año" disabled selected>Año</option>
+                <option value="1">1er Año</option>
+                <option value="2">2do Año</option>
+                <option value="3">3er Año</option>
+            </select>
+            <div class="form-group col s6">
+                <select asp-for="MateriaId" class="form-control" id="MateriaId" name="MateriaId" onchange="dropSegundo();">
+                    <option value="" disabled selected>Materia</option>
+                </select>
+            </div>
+            <div class="form-group col s6">
+                <select asp-for="TemaId" class="form-control" id="TemaId" name="TemaId">
+                    <option value="" disabled selected>Tema</option>
+                </select>
             </div>
             <div class="form-group">
-                <label asp-for="MateriaId" class="control-label"></label>
-                <select asp-for="MateriaId" class="form-control" asp-items="ViewBag.MateriaId" id="MateriaId" name="MateriaId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaSubida" class="control-label"></label>
-                <input asp-for="FechaSubida" class="form-control" id="fecha" name="fecha" />
-                <span asp-validation-for="FechaSubida" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input id="files" name="files" asp-for="Archivo" accept="video/*,.pdf,.doc,.docx" /> SELECCIONAR Archivo
-                <span asp-validation-for="Archivo" class="text-danger"></span>
+                <input asp-validation-for="Archivo" asp-for="Archivo" accept="video/*,.pdf,.doc,.docx" /> SELECCIONAR Archivo
+                <span  class="text-danger"></span>
             </div>
 
 
-
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
 
 
         </form>
 
-        <div class="">
-            <input type="" value="Create" class="btn btn-primary" onclick="uploadFiles('files');" />
-        </div>
-
-        <div class="progress">
-            <div class="determinate" id="determinate" style="width: 0%"></div>
-        </div>
     </div>
 
    
@@ -72,6 +74,14 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    $(document).ready(function () {
+
+      
+
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

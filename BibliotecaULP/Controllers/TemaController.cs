@@ -151,5 +151,14 @@ namespace BibliotecaULP.Controllers
         {
             return _context.Tema.Any(e => e.TemaId == id);
         }
+
+        [HttpPost]
+        public IActionResult GetTemasId(int idMateria)
+        {
+            var Materias = _context.Tema.Include(x => x.Materia).Where(p => p.MateriaId == idMateria).ToList();
+
+            return Json(Materias);
+        }
+
     }
 }
