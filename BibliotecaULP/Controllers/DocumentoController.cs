@@ -74,39 +74,35 @@ namespace BibliotecaULP.Controllers
         
         public async Task<IActionResult> Create([Bind("DocumentoId,Nombre,UsuarioId,TipoId,TemaId,MateriaId,FechaSubida,Archivo")] Documento documento)
         {
-            Startup.Progress = 0;
-
-            long totalBytes = documento.Archivo.Length;
+            //Startup.Progress = 0;
+            //long totalBytes = documento.Archivo.Length;
 
             if (ModelState.IsValid)
             {
+                documento.FechaSubida = DateTime.Now;
                 _context.Add(documento);
-
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 if (documento.DocumentoId > 0 && documento.DireccionDocumento == null)
                 {
                     string wwwpath = environment.WebRootPath;
-
                     string path = Path.Combine(wwwpath, "Uploads/Documentos");
-
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
                     }
-
-                    string fileName = documento.Nombre + documento.DocumentoId + Path.GetExtension(documento.Archivo.FileName);
-
+                    string fileName = documento.Materia.Nombre + documento.Materia.Carrera.Nombre + documento.DocumentoId + Path.GetExtension(documento.Archivo.FileName);
                     string pathCompleto = Path.Combine(path, fileName);
 
-                    byte[] buffer = new byte[16 * 1024];
+                    //byte[] buffer = new byte[16 * 1024];
+                    documento.DireccionDocumento = Path.Combine("/Uploads/Documentos/", fileName);
 
-                    /*     using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
-                         {
-                             documento.Archivo.CopyTo(stream);
-                         }*/
+                    using (FileStream stream = new FileStream(pathCompleto, FileMode.Create))
+                    {
+                       documento.Archivo.CopyTo(stream);
+                    }
 
-                    using (FileStream output = System.IO.File.Create(pathCompleto))
+                    /*using (FileStream output = System.IO.File.Create(pathCompleto))
                     {
                         using (Stream input = documento.Archivo.OpenReadStream())
                         {
@@ -121,18 +117,15 @@ namespace BibliotecaULP.Controllers
                                 await Task.Delay(10);
                             }
                         }
-                    }
-
-                    documento.DireccionDocumento = "Uploads/Documentos/" + fileName + documento.DocumentoId;
-
+                    }*/
                     _context.Update(documento);
                 }
 
                 _context.SaveChanges();
 
-                return this.Content("success");
+                //return this.Content("success");
 
-                //return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
 
             ViewData["MateriaId"] = new SelectList(_context.Materia, "MateriaId", "MateriaId", documento.MateriaId);
@@ -259,7 +252,7 @@ namespace BibliotecaULP.Controllers
         {
          //   ViewData["MateriaId"] = new SelectList(_context.Materia, "materiaId", "Nombre");
            // ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "Nombre");
-            ViewData["InstitutoId"] = new SelectList(_context.Instituto, "InstitutoId", "Nombre");
+            //ViewData["InstitutoId"] = new SelectList(_context.Instituto, "InstitutoId", "Nombre");
             ViewBag.Tipos = _context.Tipo.ToList();
             return View();
         }
