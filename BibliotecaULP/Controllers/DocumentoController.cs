@@ -256,9 +256,9 @@ namespace BibliotecaULP.Controllers
         // GET: Documento/Search
         public IActionResult Search()
         {
-         //   ViewData["MateriaId"] = new SelectList(_context.Materia, "materiaId", "Nombre");
-           // ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "Nombre");
-            //ViewData["InstitutoId"] = new SelectList(_context.Instituto, "InstitutoId", "Nombre");
+         // ViewData["MateriaId"] = new SelectList(_context.Materia, "materiaId", "Nombre");
+           //ViewData["CarreraId"] = new SelectList(_context.Carrera, "CarreraId", "Nombre");
+            ViewData["InstitutoId"] = new SelectList(_context.Instituto, "InstitutoId", "Nombre");
             ViewBag.Tipos = _context.Tipo.ToList();
             return View();
         }

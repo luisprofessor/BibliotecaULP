@@ -107,3 +107,50 @@ function drop2() {
         });
 }
 
+
+function drop3()
+{
+
+    var dropMateria = document.getElementById('Materia').value;
+
+    var dropTema = document.getElementById('TemaId');
+
+    $.ajax(
+        {
+            url: "/Tema/GetTemasId",
+            data: {
+                idMateria: dropMateria    
+            },
+            type: "POST",
+            success: function (data) {
+                var parseJson = JSON.parse(JSON.stringify(data));
+
+                for (var i = dropTema.childElementCount; i > 0; i--) {
+                    dropTema.remove(i);
+
+                    $(document).ready(function () {
+                        $('select').formSelect();
+                    });
+                }
+                for (var i in parseJson) {
+                    var option = document.createElement('option');
+
+                    option.value = parseJson[i].temaId;
+
+                    option.text = parseJson[i].nombre;
+
+                    dropTema.add(option);
+
+                    $(document).ready(function () {
+                        $('select').formSelect();
+                    });
+
+                    
+                }
+
+
+            }
+
+
+        });
+}
